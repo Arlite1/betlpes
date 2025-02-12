@@ -267,9 +267,9 @@ footer {
 }
 
 /* Battlepass specific styles */
-.battlepass-creator {
-    padding: 5rem 2rem;
-    max-width: 1200px;
+.battlepass-creator, .battlepass-viewer {
+    padding: 5rem 1rem;
+    max-width: 1800px;
     margin: 0 auto;
 }
 
@@ -281,16 +281,26 @@ footer {
 }
 
 .battlepass-container {
-    padding: 2rem;
+    padding: 2rem 2rem;
     background: #f8fafc;
     border-radius: 1rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: visible;
+    position: relative;
+}
+
+.progress-wrapper {
+    position: relative;
+    margin: 4rem 0;
+    width: 100%;
 }
 
 .progress-bar {
     position: relative;
-    height: 100px;
-    margin: 2rem 0;
+    height: 140px;
+    margin: 2rem 0 0 0;
+    width: 100%;
+    overflow: visible;
 }
 
 .progress-line {
@@ -308,7 +318,7 @@ footer {
     top: 50%;
     left: 0;
     height: 4px;
-    background: linear-gradient(90deg, #2563eb, #3b82f6);
+    background: linear-gradient(90deg, #d050bf, #e224db);
     transform: translateY(-50%);
     transition: width 1s ease;
     animation: pulse 2s infinite;
@@ -330,6 +340,8 @@ footer {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    z-index: 10;
+    width: 0;
 }
 
 .checkpoint-marker {
@@ -385,28 +397,33 @@ footer {
     left: 50%;
     transform: translateX(-50%);
     background: white;
-    padding: 1rem;
+    padding: 0.75rem;
     border-radius: 0.5rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 200px;
-    margin-bottom: 1rem;
-    z-index: 10;
+    margin-bottom: 1.5rem;
+    z-index: 100;
+    pointer-events: none;
+    white-space: normal;
 }
 
 .checkpoint-tooltip h4 {
     color: #1f2937;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
 }
 
 .checkpoint-tooltip p {
     color: #4b5563;
-    font-size: 0.875rem;
-    margin-bottom: 0.5rem;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
 }
 
-.checkpoint-tooltip .reward {
-    color: #2563eb;
-    font-weight: 500;
+.checkpoint-tooltip .reward,
+.checkpoint-tooltip .xp-required,
+.checkpoint-tooltip .status {
+    font-size: 0.85rem;
 }
 
 .checkpoint.completed .checkpoint-marker {
@@ -419,9 +436,15 @@ footer {
 }
 
 .progress-info {
-    margin-top: 1rem;
-    font-size: 1.1rem;
-    color: #4b5563;
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.level-display {
+    font-weight: 500;
+    color: #2563eb;
 }
 
 .not-found {
@@ -516,35 +539,6 @@ footer {
     background-color: #b91c1c;
 }
 
-/* Add these styles */
-.battlepass-viewer {
-    padding: 5rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.battlepass-info {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.battlepass-info h2 {
-    font-size: 2rem;
-    color: #1f2937;
-    margin-bottom: 1rem;
-}
-
-.progress-fill {
-    position: absolute;
-    top: 50%;
-    left: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #2563eb, #3b82f6);
-    transform: translateY(-50%);
-    transition: width 1s ease;
-    animation: pulse 2s infinite;
-}
-
 /* Shape select styles */
 .shape-select {
     width: 100%;
@@ -625,4 +619,209 @@ footer {
     text-align: center;
     padding: 2rem;
     color: #6b7280;
+}
+
+/* Add to your existing battlepass loader styles */
+.battlepass-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-icon.danger {
+    color: #dc2626;
+}
+
+.btn-icon.danger:hover {
+    background-color: #fee2e2;
+}
+
+.battlepass-item {
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s ease;
+}
+
+.battlepass-item .battlepass-info {
+    cursor: pointer;
+    flex-grow: 1;
+}
+
+.battlepass-item:hover {
+    border-color: #2563eb;
+}
+
+.battlepass-item .battlepass-info:hover h4 {
+    color: #2563eb;
+}
+
+/* Add to your existing styles */
+.nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.title-edit {
+    font-size: 2rem;
+    color: #1f2937;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.level-edit {
+    width: 60px;
+    padding: 0.25rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #2563eb;
+}
+
+.title-edit:focus,
+.level-edit:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1);
+}
+
+/* Style for disabled input when not editing */
+.title-edit:disabled,
+.level-edit:disabled {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+/* Update the nav styles */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+/* Make sure buttons in nav are visible */
+.nav-actions .btn {
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.nav-actions .btn.secondary {
+    border: 2px solid #2563eb;
+    color: #2563eb;
+    background: none;
+}
+
+.nav-actions .btn.primary {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+}
+
+.progress-controls {
+    margin-bottom: 2rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.level-control, .level-info {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.xp-edit {
+    width: 70px;
+    padding: 0.25rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.375rem;
+    text-align: center;
+    font-size: 1.1rem;
+    color: #2563eb;
+}
+
+.xp-required {
+    color: #9333ea;
+    font-weight: 500;
+    margin-top: 0.25rem;
+}
+
+.checkpoint.completed .checkpoint-marker {
+    border: 2px solid #16a34a;
+}
+
+.xp-ruler {
+    position: relative;
+    height: 40px;
+    margin-top: -10px;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.xp-tick {
+    position: absolute;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 2px;
+}
+
+.tick-line {
+    width: 2px;
+    height: 10px;
+    background-color: #94a3b8;
+}
+
+.tick-label {
+    margin-top: 4px;
+    font-size: 0.875rem;
+    color: #64748b;
+    white-space: nowrap;
+}
+
+/* Add responsive handling */
+@media (max-width: 1800px) {
+    .battlepass-container {
+        margin: 0;
+        border-radius: 1rem;
+    }
 } 

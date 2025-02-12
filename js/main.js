@@ -1,36 +1,3 @@
-// Wait for the DOM to be fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('Website loaded successfully!');
-    
-    // Add smooth scrolling to navigation links
-    document.querySelectorAll('nav a').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            const targetElement = document.getElementById(targetId);
-            
-            if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Handle contact form submission
-    const contactForm = document.querySelector('.contact-form');
-    if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            // Here you would typically send the form data to a server
-            // For now, we'll just show a success message
-            alert('Thank you for your message! We will get back to you soon.');
-            contactForm.reset();
-        });
-    }
-});
-
 // Define Alpine.js data and functions
 document.addEventListener('alpine:init', () => {
     Alpine.data('battlepassCreator', () => ({
@@ -41,6 +8,7 @@ document.addEventListener('alpine:init', () => {
                 reward: 'Basic Skin',
                 color: '#2563eb',
                 shape: 'circle',
+                xpRequired: 20,
                 showTooltip: false
             },
             {
@@ -49,6 +17,7 @@ document.addEventListener('alpine:init', () => {
                 reward: 'Bronze Pack',
                 color: '#854d0e',
                 shape: 'diamond',
+                xpRequired: 50,
                 showTooltip: false
             },
             {
@@ -57,6 +26,7 @@ document.addEventListener('alpine:init', () => {
                 reward: 'Silver Pack',
                 color: '#71717a',
                 shape: 'star',
+                xpRequired: 100,
                 showTooltip: false
             }
         ],
@@ -65,9 +35,18 @@ document.addEventListener('alpine:init', () => {
         editingCheckpoint: {},
         showLoader: false,
         savedBattlepasses: {},
+        currentLevel: 0,
+        progressPercentage: 0,
+        currentBattlepassId: null,
+        currentXP: 0,
+
+        get maxXP() {
+            return Math.max(...this.checkpoints.map(cp => cp.xpRequired));
+        },
 
         init() {
             this.loadSavedBattlepasses();
+            this.calculateProgress();
         },
 
         loadSavedBattlepasses() {
@@ -87,6 +66,9 @@ document.addEventListener('alpine:init', () => {
             if (confirm('Loading a battlepass will replace your current work. Continue?')) {
                 const battlepass = this.savedBattlepasses[id];
                 this.checkpoints = battlepass.checkpoints;
+                this.currentXP = battlepass.currentXP || 0;
+                this.currentBattlepassId = id;
+                this.calculateProgress();
                 this.closeLoadModal();
             }
         },
@@ -102,6 +84,7 @@ document.addEventListener('alpine:init', () => {
                 reward: 'Mystery Reward',
                 color: '#2563eb',
                 shape: 'circle',
+                xpRequired: this.checkpoints.length * 20, // Default XP requirement
                 showTooltip: false
             });
         },
@@ -149,35 +132,71 @@ document.addEventListener('alpine:init', () => {
         },
 
         saveBattlepass() {
-            const title = prompt('Enter a name for your battlepass:', 'My Battlepass');
+            const saveOptions = this.currentBattlepassId ? 
+                ['Create New', 'Overwrite Current', 'Cancel'] : 
+                ['Save', 'Cancel'];
+
+            const choice = this.currentBattlepassId ?
+                confirm('Do you want to overwrite the current battlepass?\nClick OK to overwrite, Cancel to create new.') :
+                true;
+
+            if (choice === null) return; // User clicked Cancel
+
+            const title = prompt('Enter a name for your battlepass:', 
+                choice && this.currentBattlepassId ? 
+                    this.savedBattlepasses[this.currentBattlepassId].title : 
+                    'My Battlepass'
+            );
+
             if (title) {
                 const battlepass = {
-                    id: Date.now().toString(),
+                    id: choice ? this.currentBattlepassId || Date.now().toString() : Date.now().toString(),
                     title: title,
                     checkpoints: this.checkpoints,
-                    createdAt: new Date().toISOString()
+                    currentXP: this.currentXP,
+                    createdAt: choice && this.currentBattlepassId ? 
+                        this.savedBattlepasses[this.currentBattlepassId].createdAt : 
+                        new Date().toISOString()
                 };
 
                 const battlepasses = JSON.parse(localStorage.getItem('battlepasses') || '{}');
                 battlepasses[battlepass.id] = battlepass;
                 localStorage.setItem('battlepasses', JSON.stringify(battlepasses));
 
-                alert(`Battlepass "${title}" saved successfully!`);
+                // Update current ID if we created a new save
+                if (!choice) {
+                    this.currentBattlepassId = battlepass.id;
+                }
+
+                alert(`Battlepass "${title}" ${choice ? 'updated' : 'saved'} successfully!`);
             }
         },
 
         viewBattlepass() {
-            // Get the latest saved battlepass
-            const battlepasses = JSON.parse(localStorage.getItem('battlepasses') || '{}');
-            const latestId = Object.keys(battlepasses).pop();
-            
-            if (latestId) {
-                // Get the current directory path
+            if (this.currentBattlepassId) {
                 const currentPath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
-                window.location.href = `${currentPath}view.html?id=${latestId}`;
+                window.location.href = `${currentPath}view.html?id=${this.currentBattlepassId}`;
             } else {
-                alert('No saved battlepass found. Save your battlepass first!');
+                alert('Please save your battlepass first!');
             }
+        },
+
+        deleteBattlepass(id) {
+            if (confirm('Are you sure you want to delete this battlepass? This action cannot be undone.')) {
+                const battlepasses = JSON.parse(localStorage.getItem('battlepasses') || '{}');
+                delete battlepasses[id];
+                localStorage.setItem('battlepasses', JSON.stringify(battlepasses));
+                this.loadSavedBattlepasses(); // Refresh the list
+            }
+        },
+
+        calculateProgress() {
+            // Calculate XP progress using the highest XP requirement
+            this.progressPercentage = (this.currentXP / this.maxXP) * 100;
+            
+            // Calculate current level based on completed checkpoints
+            const completedCheckpoints = this.checkpoints.filter(cp => this.currentXP >= cp.xpRequired).length;
+            this.currentLevel = Math.max(0, completedCheckpoints - 1);
         }
     }));
 
@@ -185,7 +204,8 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('battlepassViewer', () => ({
         battlepassFound: false,
         battlepass: null,
-        currentLevel: 2, // This could be stored/loaded from somewhere
+        currentXP: 0,
+        currentLevel: 0,
         progressPercentage: 0,
 
         init() {
@@ -198,15 +218,24 @@ document.addEventListener('alpine:init', () => {
 
                 if (battlepass) {
                     this.battlepass = battlepass;
+                    this.currentXP = battlepass.currentXP || 0;
                     this.battlepassFound = true;
                     this.calculateProgress();
                 }
             }
         },
 
+        get maxXP() {
+            return this.battlepass ? Math.max(...this.battlepass.checkpoints.map(cp => cp.xpRequired)) : 0;
+        },
+
         calculateProgress() {
-            const totalLevels = this.battlepass.checkpoints.length - 1;
-            this.progressPercentage = (this.currentLevel / totalLevels) * 100;
+            if (this.battlepass) {
+                this.progressPercentage = (this.currentXP / this.maxXP) * 100;
+                
+                const completedCheckpoints = this.battlepass.checkpoints.filter(cp => this.currentXP >= cp.xpRequired).length;
+                this.currentLevel = Math.max(0, completedCheckpoints - 1);
+            }
         },
 
         showTooltip(index) {

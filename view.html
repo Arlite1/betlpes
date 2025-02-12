@@ -31,7 +31,8 @@
                     <div class="battlepass-info">
                         <h2 x-text="battlepass.title || 'Battlepass'"></h2>
                         <div class="progress-info">
-                            <span x-text="`Current Level: ${currentLevel}`"></span>
+                            <span x-text="`Current XP: ${currentXP} / ${battlepass.maxXP}`"></span>
+                            <span class="level-display" x-text="`Level: ${currentLevel}`"></span>
                         </div>
                     </div>
 
@@ -41,7 +42,7 @@
                         <template x-for="(checkpoint, index) in battlepass.checkpoints" :key="index">
                             <div 
                                 class="checkpoint" 
-                                :class="{ 'completed': index <= currentLevel }"
+                                :class="{ 'completed': currentXP >= checkpoint.xpRequired }"
                                 :style="`left: ${index * (100 / (battlepass.checkpoints.length - 1))}%`"
                                 @mouseover="showTooltip(index)"
                                 @mouseout="hideTooltip(index)">
@@ -54,8 +55,17 @@
                                     <h4 x-text="checkpoint.title"></h4>
                                     <p x-text="checkpoint.description"></p>
                                     <p class="reward" x-text="'Reward: ' + checkpoint.reward"></p>
-                                    <p class="status" x-text="index <= currentLevel ? 'Completed' : 'Locked'"></p>
+                                    <p class="xp-required" x-text="`Required XP: ${checkpoint.xpRequired}`"></p>
+                                    <p class="status" x-text="currentXP >= checkpoint.xpRequired ? 'Completed' : 'Locked'"></p>
                                 </div>
+                            </div>
+                        </template>
+                    </div>
+                    <div class="xp-ruler">
+                        <template x-for="(checkpoint, index) in battlepass.checkpoints" :key="index">
+                            <div class="xp-tick" :style="`left: ${index * (100 / (battlepass.checkpoints.length - 1))}%`">
+                                <div class="tick-line"></div>
+                                <span class="tick-label" x-text="checkpoint.xpRequired"></span>
                             </div>
                         </template>
                     </div>

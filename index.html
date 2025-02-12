@@ -25,28 +25,61 @@
                 <button @click="showLoadModal" class="btn primary">Load Battlepass</button>
             </div>
 
+            <div class="progress-controls">
+                <div class="level-control">
+                    <label>Current XP:</label>
+                    <input 
+                        type="number" 
+                        x-model.number="currentXP"
+                        class="xp-edit"
+                        min="0"
+                        :max="maxXP"
+                        @input="calculateProgress">
+                    <span x-text="` / ${maxXP} XP`"></span>
+                </div>
+                <div class="level-info">
+                    <span>Current Level: </span>
+                    <span x-text="currentLevel"></span>
+                    <span x-text="` / ${checkpoints.length - 1}`"></span>
+                </div>
+            </div>
+
             <div class="battlepass-container">
-                <div class="progress-bar">
-                    <div class="progress-line"></div>
-                    <template x-for="(checkpoint, index) in checkpoints" :key="index">
-                        <div 
-                            class="checkpoint" 
-                            :style="`left: ${index * (100 / (checkpoints.length - 1))}%`"
-                            @mouseover="showTooltip(index)"
-                            @mouseout="hideTooltip(index)"
-                            @click="editCheckpoint(index)">
-                            <div class="checkpoint-marker"
-                                :data-shape="checkpoint.shape"
-                                :style="`background-color: ${checkpoint.color}`">
+                <div class="progress-wrapper">
+                    <div class="progress-bar">
+                        <div class="progress-line"></div>
+                        <div class="progress-fill" :style="`width: ${progressPercentage}%`"></div>
+                        <template x-for="(checkpoint, index) in checkpoints" :key="index">
+                            <div 
+                                class="checkpoint" 
+                                :class="{ 'completed': currentXP >= checkpoint.xpRequired }"
+                                :style="`left: ${index * (100 / (checkpoints.length - 1))}%`"
+                                @mouseover="showTooltip(index)"
+                                @mouseout="hideTooltip(index)"
+                                @click="editCheckpoint(index)">
+                                <div class="checkpoint-marker"
+                                    :data-shape="checkpoint.shape"
+                                    :style="`background-color: ${checkpoint.color}`">
+                                </div>
+                                <div x-show="checkpoint.showTooltip" 
+                                    class="checkpoint-tooltip">
+                                    <h4 x-text="checkpoint.title"></h4>
+                                    <p x-text="checkpoint.description"></p>
+                                    <p class="reward" x-text="'Reward: ' + checkpoint.reward"></p>
+                                    <p class="xp-required" x-text="`Required XP: ${checkpoint.xpRequired}`"></p>
+                                    <p class="status" x-text="currentXP >= checkpoint.xpRequired ? 'Completed' : 'Locked'"></p>
+                                </div>
                             </div>
-                            <div x-show="checkpoint.showTooltip" 
-                                class="checkpoint-tooltip">
-                                <h4 x-text="checkpoint.title"></h4>
-                                <p x-text="checkpoint.description"></p>
-                                <p class="reward" x-text="'Reward: ' + checkpoint.reward"></p>
+                        </template>
+                    </div>
+                    <div class="xp-ruler">
+                        <template x-for="(checkpoint, index) in checkpoints" :key="index">
+                            <div class="xp-tick" :style="`left: ${index * (100 / (checkpoints.length - 1))}%`">
+                                <div class="tick-line"></div>
+                                <span class="tick-label" x-text="checkpoint.xpRequired"></span>
                             </div>
-                        </div>
-                    </template>
+                        </template>
+                    </div>
                 </div>
             </div>
 
@@ -80,6 +113,14 @@
                             <option value="hexagon">Hexagon</option>
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label>XP Required</label>
+                        <input 
+                            type="number" 
+                            x-model.number="editingCheckpoint.xpRequired"
+                            min="0"
+                            :max="maxXP">
+                    </div>
                     <div class="modal-buttons">
                         <button @click="deleteCheckpoint" class="btn danger">Delete</button>
                         <div class="modal-buttons-right">
@@ -96,12 +137,19 @@
                     <h3>Load Battlepass</h3>
                     <div class="battlepass-list">
                         <template x-for="(pass, id) in savedBattlepasses" :key="id">
-                            <div class="battlepass-item" @click="loadBattlepass(id)">
-                                <div class="battlepass-info">
+                            <div class="battlepass-item">
+                                <div class="battlepass-info" @click="loadBattlepass(id)">
                                     <h4 x-text="pass.title"></h4>
                                     <p class="timestamp" x-text="formatDate(pass.createdAt)"></p>
                                 </div>
-                                <span class="checkpoint-count" x-text="`${pass.checkpoints.length} checkpoints`"></span>
+                                <div class="battlepass-actions">
+                                    <span class="checkpoint-count" x-text="`${pass.checkpoints.length} checkpoints`"></span>
+                                    <button @click="deleteBattlepass(id)" class="btn-icon danger">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </button>
+                                </div>
                             </div>
                         </template>
                         <div x-show="Object.keys(savedBattlepasses).length === 0" class="no-battlepasses">
