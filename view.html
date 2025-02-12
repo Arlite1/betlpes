@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Battlepass</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script src="js/main.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Battlepass Viewer</div>
+            <a href="index.html" class="btn primary">Back to Creator</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="battlepass-viewer" x-data="battlepassViewer">
+            <template x-if="!battlepassFound">
+                <div class="not-found">
+                    <h2>Battlepass Not Found</h2>
+                    <p>The requested battlepass could not be found.</p>
+                    <a href="index.html" class="btn primary">Back to Creator</a>
+                </div>
+            </template>
+
+            <template x-if="battlepassFound">
+                <div class="battlepass-container">
+                    <div class="battlepass-info">
+                        <h2 x-text="battlepass.title || 'Battlepass'"></h2>
+                        <div class="progress-info">
+                            <span x-text="`Current Level: ${currentLevel}`"></span>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="progress-line"></div>
+                        <div class="progress-fill" :style="`width: ${progressPercentage}%`"></div>
+                        <template x-for="(checkpoint, index) in battlepass.checkpoints" :key="index">
+                            <div 
+                                class="checkpoint" 
+                                :class="{ 'completed': index <= currentLevel }"
+                                :style="`left: ${index * (100 / (battlepass.checkpoints.length - 1))}%`"
+                                @mouseover="showTooltip(index)"
+                                @mouseout="hideTooltip(index)">
+                                <div class="checkpoint-marker"
+                                    :data-shape="checkpoint.shape"
+                                    :style="`background-color: ${checkpoint.color}`">
+                                </div>
+                                <div x-show="checkpoint.showTooltip" 
+                                    class="checkpoint-tooltip">
+                                    <h4 x-text="checkpoint.title"></h4>
+                                    <p x-text="checkpoint.description"></p>
+                                    <p class="reward" x-text="'Reward: ' + checkpoint.reward"></p>
+                                    <p class="status" x-text="index <= currentLevel ? 'Completed' : 'Locked'"></p>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </template>
+        </section>
+    </main>
+</body>
+</html> 

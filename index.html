@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battlepass Creator</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Add Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">Battlepass Creator</div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="battlepass-creator" x-data="battlepassCreator">
+            <div class="controls">
+                <button @click="addCheckpoint" class="btn primary">Add Checkpoint</button>
+                <button @click="removeLastCheckpoint" class="btn secondary">Remove Last</button>
+                <button @click="saveBattlepass" class="btn primary">Save Battlepass</button>
+                <button @click="viewBattlepass" class="btn secondary">View Battlepass</button>
+                <button @click="showLoadModal" class="btn primary">Load Battlepass</button>
+            </div>
+
+            <div class="battlepass-container">
+                <div class="progress-bar">
+                    <div class="progress-line"></div>
+                    <template x-for="(checkpoint, index) in checkpoints" :key="index">
+                        <div 
+                            class="checkpoint" 
+                            :style="`left: ${index * (100 / (checkpoints.length - 1))}%`"
+                            @mouseover="showTooltip(index)"
+                            @mouseout="hideTooltip(index)"
+                            @click="editCheckpoint(index)">
+                            <div class="checkpoint-marker"
+                                :data-shape="checkpoint.shape"
+                                :style="`background-color: ${checkpoint.color}`">
+                            </div>
+                            <div x-show="checkpoint.showTooltip" 
+                                class="checkpoint-tooltip">
+                                <h4 x-text="checkpoint.title"></h4>
+                                <p x-text="checkpoint.description"></p>
+                                <p class="reward" x-text="'Reward: ' + checkpoint.reward"></p>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Checkpoint Editor Modal -->
+            <div x-show="showEditor" class="modal">
+                <div class="modal-content">
+                    <h3>Edit Checkpoint</h3>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" x-model="editingCheckpoint.title">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea x-model="editingCheckpoint.description"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Reward</label>
+                        <input type="text" x-model="editingCheckpoint.reward">
+                    </div>
+                    <div class="form-group">
+                        <label>Color</label>
+                        <input type="color" x-model="editingCheckpoint.color">
+                    </div>
+                    <div class="form-group">
+                        <label>Shape</label>
+                        <select x-model="editingCheckpoint.shape" class="shape-select">
+                            <option value="circle">Circle</option>
+                            <option value="diamond">Diamond</option>
+                            <option value="star">Star</option>
+                            <option value="square">Square</option>
+                            <option value="hexagon">Hexagon</option>
+                        </select>
+                    </div>
+                    <div class="modal-buttons">
+                        <button @click="deleteCheckpoint" class="btn danger">Delete</button>
+                        <div class="modal-buttons-right">
+                            <button @click="saveCheckpoint" class="btn primary">Save</button>
+                            <button @click="closeEditor" class="btn secondary">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load Battlepass Modal -->
+            <div x-show="showLoader" class="modal">
+                <div class="modal-content">
+                    <h3>Load Battlepass</h3>
+                    <div class="battlepass-list">
+                        <template x-for="(pass, id) in savedBattlepasses" :key="id">
+                            <div class="battlepass-item" @click="loadBattlepass(id)">
+                                <div class="battlepass-info">
+                                    <h4 x-text="pass.title"></h4>
+                                    <p class="timestamp" x-text="formatDate(pass.createdAt)"></p>
+                                </div>
+                                <span class="checkpoint-count" x-text="`${pass.checkpoints.length} checkpoints`"></span>
+                            </div>
+                        </template>
+                        <div x-show="Object.keys(savedBattlepasses).length === 0" class="no-battlepasses">
+                            No saved battlepasses found
+                        </div>
+                    </div>
+                    <div class="modal-buttons">
+                        <button @click="closeLoadModal" class="btn secondary">Close</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+</html> 

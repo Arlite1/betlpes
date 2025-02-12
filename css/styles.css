@@ -1,0 +1,628 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Header styles */
+header {
+    background-color: rgba(255, 255, 255, 0.95);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 5%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2563eb;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+nav ul li a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+nav ul li a:hover {
+    color: #2563eb;
+}
+
+/* Hero section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.hero-content {
+    color: white;
+    max-width: 800px;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    margin-bottom: 2rem;
+    opacity: 0.9;
+}
+
+/* Buttons */
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+.btn.primary {
+    background-color: white;
+    color: #2563eb;
+}
+
+.btn.secondary {
+    border: 2px solid rgb(0, 0, 0);
+    color: rgb(0, 0, 0);
+}
+
+/* Features section */
+.features {
+    padding: 5rem 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.features h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    color: #1f2937;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    padding: 0 1rem;
+}
+
+.feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.feature-card h3 {
+    color: #2563eb;
+    margin-bottom: 1rem;
+}
+
+/* Footer styles */
+footer {
+    background-color: #1f2937;
+    color: white;
+    text-align: center;
+    padding: 1.5rem;
+    margin-top: auto;
+}
+
+/* About section */
+.about {
+    background-color: #f8fafc;
+    padding: 5rem 1rem;
+}
+
+.about-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 2.5rem;
+    color: #1f2937;
+    margin-bottom: 2rem;
+}
+
+.about-text {
+    max-width: 800px;
+    margin: 0 auto 3rem;
+    font-size: 1.1rem;
+    color: #4b5563;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.stat-item {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.stat-item h3 {
+    font-size: 2.5rem;
+    color: #2563eb;
+    margin-bottom: 0.5rem;
+}
+
+/* Contact section */
+.contact {
+    padding: 5rem 1rem;
+    background: white;
+}
+
+.contact h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #1f2937;
+    margin-bottom: 3rem;
+}
+
+.contact-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    nav ul {
+        gap: 1rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-container {
+        padding: 0 1rem;
+    }
+}
+
+/* Battlepass specific styles */
+.battlepass-creator {
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.controls {
+    margin-bottom: 2rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.battlepass-container {
+    padding: 2rem;
+    background: #f8fafc;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.progress-bar {
+    position: relative;
+    height: 100px;
+    margin: 2rem 0;
+}
+
+.progress-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #e5e7eb;
+    transform: translateY(-50%);
+}
+
+.progress-fill {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #2563eb, #3b82f6);
+    transform: translateY(-50%);
+    transition: width 1s ease;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.8;
+    }
+}
+
+.checkpoint {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.checkpoint-marker {
+    width: 20px;
+    height: 20px;
+    background: #2563eb;
+    cursor: pointer;
+    transform: translateX(-50%);
+    transition: all 0.3s ease;
+}
+
+.checkpoint-marker:hover {
+    transform: translateX(-50%) scale(1.2);
+}
+
+.checkpoint-marker[data-shape="circle"] {
+    border-radius: 50%;
+}
+
+.checkpoint-marker[data-shape="diamond"] {
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.checkpoint-marker[data-shape="diamond"]:hover {
+    transform: translateX(-50%) rotate(45deg) scale(1.2);
+}
+
+.checkpoint-marker[data-shape="star"] {
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    width: 24px;
+    height: 24px;
+}
+
+.checkpoint-marker[data-shape="star"]:hover {
+    transform: translateX(-50%) scale(1.2);
+}
+
+.checkpoint-marker[data-shape="square"] {
+    border-radius: 4px;
+}
+
+.checkpoint-marker[data-shape="hexagon"] {
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+.checkpoint-marker[data-shape="hexagon"]:hover {
+    transform: translateX(-50%) scale(1.2);
+}
+
+.checkpoint-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    margin-bottom: 1rem;
+    z-index: 10;
+}
+
+.checkpoint-tooltip h4 {
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+}
+
+.checkpoint-tooltip p {
+    color: #4b5563;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.checkpoint-tooltip .reward {
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.checkpoint.completed .checkpoint-marker {
+    border: 2px solid #16a34a;
+}
+
+.battlepass-info {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.progress-info {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+    color: #4b5563;
+}
+
+.not-found {
+    text-align: center;
+    padding: 4rem 1rem;
+}
+
+.not-found h2 {
+    font-size: 2rem;
+    color: #1f2937;
+    margin-bottom: 1rem;
+}
+
+.not-found p {
+    color: #4b5563;
+    margin-bottom: 2rem;
+}
+
+.checkpoint-tooltip .status {
+    margin-top: 0.5rem;
+    font-weight: 500;
+}
+
+.checkpoint-tooltip .status:not(.completed) {
+    color: #dc2626;
+}
+
+/* Modal styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    width: 100%;
+    max-width: 500px;
+}
+
+.modal-content h3 {
+    margin-bottom: 1.5rem;
+    color: #1f2937;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #4b5563;
+}
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1.5rem;
+}
+
+.modal-buttons-right {
+    display: flex;
+    gap: 1rem;
+}
+
+.btn.danger {
+    background-color: #dc2626;
+    color: white;
+    border: none;
+}
+
+.btn.danger:hover {
+    background-color: #b91c1c;
+}
+
+/* Add these styles */
+.battlepass-viewer {
+    padding: 5rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.battlepass-info {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.battlepass-info h2 {
+    font-size: 2rem;
+    color: #1f2937;
+    margin-bottom: 1rem;
+}
+
+.progress-fill {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #2563eb, #3b82f6);
+    transform: translateY(-50%);
+    transition: width 1s ease;
+    animation: pulse 2s infinite;
+}
+
+/* Shape select styles */
+.shape-select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    background-color: white;
+}
+
+/* Progress animation between checkpoints */
+.progress-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, 
+        transparent 0%,
+        #3b82f6 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Battlepass loader styles */
+.battlepass-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 1rem 0;
+}
+
+.battlepass-item {
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.battlepass-item:hover {
+    background-color: #f8fafc;
+    border-color: #2563eb;
+}
+
+.battlepass-item .battlepass-info h4 {
+    margin-bottom: 0.25rem;
+    color: #1f2937;
+}
+
+.battlepass-item .timestamp {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.battlepass-item .checkpoint-count {
+    font-size: 0.875rem;
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.no-battlepasses {
+    text-align: center;
+    padding: 2rem;
+    color: #6b7280;
+} 
